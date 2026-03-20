@@ -5,19 +5,19 @@ import * as Notifications from "expo-notifications";
 import { Camera, MapPin, Save } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    Image,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+  ActivityIndicator,
+  Alert,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { useTheme } from "../components/ThemeProvider";
 
@@ -72,7 +72,13 @@ export default function AddEntryScreen({ navigation, route }: any) {
           latitude: loc.coords.latitude,
           longitude: loc.coords.longitude,
         });
-        setAddress(`${geo.name || ""} ${geo.street || ""}, ${geo.city}`);
+
+        // REFINED LOCATION LOGIC: Municipality, Province
+        const city = geo.city || geo.subregion || "";
+        const province = geo.region || "";
+        const formatted = [city, province].filter(Boolean).join(", ");
+
+        setAddress(formatted || "Unknown Location");
       }
     } catch (e) {
       Alert.alert("GPS", "Manual entry required.");
@@ -85,6 +91,7 @@ export default function AddEntryScreen({ navigation, route }: any) {
       return Alert.alert("Validation", "Required: Title, Photo, Location");
     const raw = await AsyncStorage.getItem("@travel_diary");
     let data = raw ? JSON.parse(raw) : [];
+
     const entry = {
       id: editItem?.id || Date.now().toString(),
       title,
@@ -100,6 +107,7 @@ export default function AddEntryScreen({ navigation, route }: any) {
           year: "numeric",
         }),
     };
+
     data = editItem
       ? data.map((e: any) => (e.id === editItem.id ? entry : e))
       : [entry, ...data];
@@ -143,6 +151,7 @@ export default function AddEntryScreen({ navigation, route }: any) {
               </View>
             )}
           </TouchableOpacity>
+
           <Text style={[styles.label, { color: colors.text }]}>Trip Title</Text>
           <TextInput
             style={[
@@ -158,6 +167,7 @@ export default function AddEntryScreen({ navigation, route }: any) {
             placeholder="Enter title"
             placeholderTextColor={colors.sub}
           />
+
           <Text style={[styles.label, { color: colors.text }]}>
             Description
           </Text>
@@ -177,6 +187,7 @@ export default function AddEntryScreen({ navigation, route }: any) {
             placeholderTextColor={colors.sub}
             multiline
           />
+
           <Text style={[styles.label, { color: colors.text }]}>Location</Text>
           <View style={{ flexDirection: "row", gap: 10 }}>
             <TextInput
@@ -191,7 +202,7 @@ export default function AddEntryScreen({ navigation, route }: any) {
               ]}
               value={address}
               onChangeText={setAddress}
-              placeholder="Address"
+              placeholder="City, Province"
               placeholderTextColor={colors.sub}
             />
             <TouchableOpacity
@@ -205,6 +216,7 @@ export default function AddEntryScreen({ navigation, route }: any) {
               )}
             </TouchableOpacity>
           </View>
+
           <TouchableOpacity
             onPress={onSave}
             style={[styles.saveBtn, { backgroundColor: colors.primary }]}
