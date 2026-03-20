@@ -1,23 +1,23 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-    ArrowUpDown,
-    Calendar,
-    Edit3,
-    MapPin,
-    Plus,
-    Search,
-    Trash2,
+  ArrowUpDown,
+  Calendar,
+  Edit3,
+  MapPin,
+  Plus,
+  Search,
+  Trash2,
 } from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import {
-    Alert,
-    FlatList,
-    Image,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { useTheme } from "../components/ThemeProvider";
 import { TravelEntry } from "../types";
@@ -94,7 +94,7 @@ export default function HomeScreen({ navigation }: any) {
         data={filteredEntries}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listPadding} // FIX: Adds scrollable space at bottom
+        contentContainerStyle={styles.listPadding}
         renderItem={({ item }) => (
           <View style={[styles.card, { backgroundColor: colors.card }]}>
             <Image
@@ -221,7 +221,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 8,
   },
-  listPadding: {
-    paddingBottom: 80,
-  },
+  listPadding: { paddingBottom: 120 },
 });
